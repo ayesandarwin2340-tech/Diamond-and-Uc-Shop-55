@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Diamond X UC Shop — Official</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --card: #ffffff;
+    --accent: #007aff;
+    --muted: #8e8e93;
+    --dark: #1c1c1e;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--dark); }
+  .wrap { max-width: 500px; margin: 0 auto; padding: 20px 16px; }
+
+  /* Header Section */
+  .header { 
+    display: flex; 
+    gap: 15px; 
+    align-items: center; 
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 18px; 
+    border-radius: 20px; 
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); 
+    margin-bottom: 25px; 
+  }
+  .brand { 
+    width: 85px; 
+    height: 65px; 
+    border-radius: 15px; 
+    background: transparent;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    overflow: hidden; 
+  }
+  .hdr-title { 
+    font-size: 22px; 
+    font-weight: 700; 
+    background: linear-gradient(135deg, #007aff, #ff2d55, #5856d6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Banner Slider Styling */
+  .banner-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .banner-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  .banner-wrapper img {
+    width: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Tabs */
+  .tabs { display: flex; background: #e3e3e8; padding: 2px; border-radius: 10px; margin-bottom: 20px; }
+  .tab { flex: 1; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; }
+  .tab.active { background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.12); color: var(--accent); }
+
+  /* Grid & Packages */
+  .card { background: var(--card); padding: 18px; border-radius: var(--radius); margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .pkg { 
+    background: #fff; border: 1.5px solid #efeff4; border-radius: 14px; padding: 12px 6px; 
+    text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center;
+  }
+  .pkg img { width: 35px; height: 35px; margin-bottom: 8px; object-fit: contain; }
+  .pkg.selected { border-color: var(--accent); background: rgba(0, 122, 255, 0.05); transform: translateY(-3px); }
+  .pkg .n { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .pkg .p { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+  /* Summary Bar */
+  .selection-preview {
+    margin-top: 15px; padding: 12px; border-radius: 10px; background: var(--dark);
+    color: white; text-align: center; font-weight: 700; font-size: 14px; display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Inputs & Forms */
+  input { 
+    width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #d1d1d6; 
+    background: #f9f9fb; font-size: 15px; outline: none; margin-bottom: 12px;
+  }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 0 0 6px 4px; color: #666; }
+  #nicknameDisplay { padding: 4px 8px; font-size: 14px; font-weight: 800; color: #34c759; margin-bottom: 15px; }
+
+  /* Payment */
+  .pm-row { display: flex; gap: 8px; margin-bottom: 15px; }
+  .pm { 
+    flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #e5e5ea; 
+    text-align: center; cursor: pointer; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .pm img { width: 22px; height: 22px; border-radius: 4px; }
+  .pm.active { border-color: var(--accent); background: rgba(0, 122, 255, 0.05); color: var(--accent); }
+  .pay-box { background: #f8f8fa; border: 1px dashed var(--accent); border-radius: 12px; padding: 15px; text-align: left; }
+
+  .btn { 
+    width: 100%; padding: 18px; border-radius: 16px; background: var(--accent); color: #fff; 
+    font-weight: 700; border: none; cursor: pointer; font-size: 16px; margin-top: 20px;
+  }
+  .btn:disabled { background: #ccc; }
+
+  footer { text-align: center; padding: 25px 20px; font-size: 13px; color: var(--muted); line-height: 1.8; border-top: 1px solid #e5e5ea; margin-top: 20px; }
+  .tg-contact { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #0088cc; color: #fff !important; padding: 6px 14px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <div class="brand">
+      <img src="https://cdn1.codashop.com/S/content/mobile/images/product-tiles/MLBB-2025-tiles-178x178.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 13px;">
+    </div>
+    <div>
+      <div class="hdr-title">𝐃𝐈𝐀𝐌𝐎𝐍𝐃 𝐗 <span style="color:#007aff;">𝐔𝐂</span> 𝐒𝐇𝐎𝐏✰</div>
+      <div class="hdr-sub" style="font-size: 11px; color: #8e8e93; letter-spacing: 1px;">
+        <i class="fas fa-check-circle" style="color: #34c759;"></i> OFFICIAL TOP-UP CENTER
+      </div>
+    </div>
+  </div>
+
+ 
+  <div class="banner-container">
+  <div class="banner-wrapper" id="bannerWrapper">
+    <img src="https://news.codashop.com/mm/wp-content/uploads/sites/8/2020/09/How-to-Top-Up-Mobile-Legends.png" alt="MLBB 1">
+    <img src="https://news.codashop.com/ph/wp-content/uploads/sites/5/2023/09/MLBB-Badang-Hero-Guide-1.jpg" alt="MLBB 2">
+    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fcb56904-cc19-4723-acc9-0f9cd2b0e295/disf1wd-4bf87aff-f257-4876-aa50-f166ce2b982c.jpg/v1/fill/w_1280,h_720,q_75,strp/lucas_hero_splash_art_mlbb_by_nurm10_disf1wd-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9mY2I1NjkwNC1jYzE5LTQ3MjMtYWNjOS0wZjljZDJiMGUyOTUvZGlzZjF3ZC00YmY4N2FmZi1mMjU3LTQ4NzYtYWE1MC1mMTY2Y2UyYjk4MmMuanBnIiwiaGVpZ2h0IjoiPD03MjAiLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS53YXRlcm1hcmsiXSwid21rIjp7InBhdGgiOiIvd20vZmNiNTY5MDQtY2MxOS00NzIzLWFjYzktMGY5Y2QyYjBlMjk1L251cm0xMC00LnBuZyIsIm9wYWNpdHkiOjk1LCJwcm9wb3J0aW9ucyI6MC40NSwiZ3Jhdml0eSI6ImNlbnRlciJ9fQ.C97qtpyxEa8yAtz5p5qUzGTwN0IFBAjHA4JESHGEpEQ" alt="MLBB 3">
+    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fcb56904-cc19-4723-acc9-0f9cd2b0e295/dikbb2s-5b36d3cb-9db1-4402-a2ee-dd710be84a0e.jpg/v1/fill/w_1280,h_729,q_75,strp/nolan___the_navigator_11_11_skin_by_nurm10_dikbb2s-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9mY2I1NjkwNC1jYzE5LTQ3MjMtYWNjOS0wZjljZDJiMGUyOTUvZGlrYmIycy01YjM2ZDNjYi05ZGIxLTQ0MDItYTJlZS1kZDcxMGJlODRhMGUuanBnIiwiaGVpZ2h0IjoiPD03MjkiLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS53YXRlcm1hcmsiXSwid21rIjp7InBhdGgiOiIvd20vZmNiNTY5MDQtY2MxOS00NzIzLWFjYzktMGY5Y2QyYjBlMjk1L251cm0xMC00LnBuZyIsIm9wYWNpdHkiOjk1LCJwcm9wb3J0aW9ucyI6MC40NSwiZ3Jhdml0eSI6ImNlbnRlciJ9fQ.6iaJ2kx6U45oBmfPKJNz5m6xI6f7yAQOBQEjJzgHKTE" alt="MLBB 4">
+    <img src="https://img-cdn-sg.payermax.com/pay/jolly-mmc-auth/prod/app-goods/mlbb-oct-detailbanner20250930070257163.jpg?__jm_cache=1" alt="MLBB 2">
+    <img src="https://news.codashop.com/ph/wp-content/uploads/sites/5/2025/01/MLBB-Blog-1280x720-Dyrroth.jpg" alt="MLHero">
+    <img src="https://cdn.prod.website-files.com/65956e2711516206d2d1258f/66afcf00279b215f08df85ca_mlbb2.webp" alt="MLHero">
+    <img src="https://news.seagm.com/wp-content/uploads/2025/09/How-to-Buy-MLBB-Diamonds-2025-Top-Up-Guide.png" alt="MLHero">
+    <img src="https://i.postimg.cc/sDvdXvdb/Internet-20251225-004257-14.jpg" alt="MLHero">
+ </div>
+</div>
+
+
+  <div class="tabs">
+    <div class="tab active" id="tab-mlbb" onclick="switchGame('mlbb')">MLBB</div>
+    <div class="tab" id="tab-pubg" onclick="switchGame('pubg')">PUBG</div>
+  </div>
+
+  <div class="card">
+    <label id="sectionTitle">💎 Select Amount</label>
+    <div class="grid" id="priceGrid"></div>
+    <div id="selectionSummary" class="selection-preview"></div>
+  </div>
+
+  <div class="card">
+    <label>Player ID</label>
+    <input id="playerId" type="number" placeholder="Enter ID">
+    
+    <div id="mlInputs">
+      <label>Server ID</label>
+      <input id="serverId" type="number" placeholder="Enter Server">
+    </div>
+
+    <div id="nicknameDisplay"></div>
+
+    <label>Payment Method</label>
+    <div class="pm-row">
+      <div class="pm active" id="pm-kpay" onclick="selectPM('KPay', this)">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKjtEcsP9rr2zVPrMMX7eV9gLJO7e6OYtX8CIArmeeYQ&s=10"> KBZPay
+      </div>
+      <div class="pm" id="pm-wave" onclick="selectPM('Wave', this)">
+        <img src="https://cdn.aptoide.com/imgs/f/9/4/f94b179fd74f339296157336828b47b3_icon.png"> Wave Pay
+      </div>
+    </div>
+
+    <div class="pay-box">
+      <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+        <span>Number:</span> <b id="dispNumber" style="color:var(--accent)">none kpay</b>
+      </div>
+      <div style="display:flex; justify-content:space-between;">
+        <span>Name:</span> <b id="dispName">contact tg</b>
+      </div>
+    </div>
+
+    <label style="margin-top:15px;">Transfer Slip (Payment Screenshot)</label>
+    <input id="slip" type="file" accept="image/*">
+
+    <button class="btn" id="orderBtn" onclick="submitOrder()">Order Now 🛒</button>
+  </div>
+
+  <footer>
+    <div>© 2025**𝐃𝐢𝐚𝐦𝐨𝐧𝐝𝐬 𝐗 𝐔𝐂 𝐒𝐡𝐨𝐩 𝐌𝐲𝐚𝐧𝐦𝐚𝐫✰. 𝙰𝚕𝚕 𝚁𝚒𝚐𝚑𝚝 𝚁𝚎𝚟𝚎𝚛𝚜𝚎𝚍.✔</div>
+    <div>3 မိနစ် (သို့) 30 မိနစ်အတွင်း Diamonds မရောက်ပါက</div>
+    <a href="https://t.me/paingoo560" class="tg-contact">
+      <i class="fab fa-telegram"></i> Contact @paingoo560
+    </a>
+  </footer>
+</div>
+
+<script>
+const diaIcon = "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334250020_b0872ecf-3f35-4a3a-be97-6e0073600751.png";
+const ucIcon = "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/60_PUBG_UC.png";
+
+const MLBB = [
+{label:'5 Diamonds', price:650, img: diaIcon},
+  {label:'11 Diamonds', price:900, img: diaIcon},
+  {label:'22 Diamonds', price:1800, img: diaIcon},
+  {label:'33 Diamonds', price:2700, img: diaIcon},
+  {label:'44 Diamonds', price:3600, img: diaIcon}, 
+  {label:'56 Diamonds', price:4000, img: diaIcon}, 
+  {label:'86 Diamonds', price:4900, img: diaIcon},
+  {label:'112 Diamonds', price:7600, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'172 Diamonds', price:9800, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'257 Diamonds', price:15000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'343 Diamonds', price:19500, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'429 Diamonds', price:24500, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'514 Diamonds', price:28700, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'600 Diamonds', price:34000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'706 Diamonds', price:39000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'878 Diamonds', price:49000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'963 Diamonds', price:53000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'1049 Diamonds', price:56000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245056_efd05219-8413-4d21-b8be-79d49af43c09.png"},
+  {label:'1135 Diamonds', price:63000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245056_efd05219-8413-4d21-b8be-79d49af43c09.png"},
+  {label:'1412 Diamonds', price:77000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245056_efd05219-8413-4d21-b8be-79d49af43c09.png"},
+  {label:'2195 Diamonds', price:118000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335244496_8ccf974b-354c-4832-a3f4-c194147570f5.png"},
+  {label:'3688 Diamonds', price:195000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335243879_e08cea74-4cdb-4629-a6b6-e28db8ebf4b8.png"},        
+  {label:'5532 Diamonds', price:295000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335243879_e08cea74-4cdb-4629-a6b6-e28db8ebf4b8.png"},
+  {label:'9288 Diamonds', price:489000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335243879_e08cea74-4cdb-4629-a6b6-e28db8ebf4b8.png"},
+  {label:'50+50 Diamonds', price:3300, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222477_bdd28040-0bd9-4dff-b748-ed7b1a0aecdd.png"},          
+  {label:'150+150 Diamonds', price:9500, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222447_c62c5300-1e1f-4f91-90f4-d677eeb054db.png"},
+  {label:'250+250 Diamonds', price:16000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222415_581d8871-25f1-4a8c-a45c-297bfbc69d6c.png"},
+  {label:'500+500 Diamonds', price:31000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222388_daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png"},
+  {label:'Twilight Pass', price:33000, img: "https://img-cdn-sg.payermax.com/shoplay365/prod/upload/app-goods/twilight2021061014233263520241218054459128.png"},     
+  {label:'Weekly Pass', price:5950, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334604324_13680c57-734d-4b72-a430-8bdbded02ab8.png"}
+];
+
+const PUBG = [
+  {label:'60 UC', price:4300, img: ucIcon},
+  {label:'120 UC', price:8300, img: ucIcon},
+  {label:'180 UC', price:12300, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/60_PUBG_UC.png"},
+  {label:'240 UC', price:16300, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/325_PUBG_UC.png"},
+  {label:'325 UC', price:19800, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/325_PUBG_UC.png"},
+  {label:'385 UC', price:24000, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/325_PUBG_UC.png"},
+  {label:'445 UC', price:28100, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+   {label:'505 UC', price:32100, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"}, 
+  {label:'660 UC', price:36900, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+    {label:'720 UC', price:43900, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+   {label:'1800 UC', price:98300, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+    {label:'3850 UC', price:199500, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/3850_PUBG_UC.png"},
+     {label:'8100 UC', price:399000, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/8100_PUBG_UC.png"}
+     
+];
+
+let currentGame = 'mlbb', selectedPackage = null, verifiedName = "";
+const BOT_TOKEN = "8482335574:AAExSnGOZ-A-muZkI1sN8horSoOMGXs6WSg";
+const CHAT_ID = "7198050249";
+
+function renderGrid(){
+  const grid = document.getElementById('priceGrid');
+  const summary = document.getElementById('selectionSummary');
+  grid.innerHTML=''; 
+  summary.style.display = 'none';
+  const list = currentGame==='mlbb' ? MLBB : PUBG;
+  list.forEach(it => {
+    const el = document.createElement('div');
+    el.className='pkg';
+    el.innerHTML = `<img src="${it.img}"><div class="n">${it.label}</div><div class="p">${it.price.toLocaleString()} Ks</div>`;
+    el.onclick = () => {
+      document.querySelectorAll('.pkg').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPackage = it;
+      summary.style.display = 'block';
+      summary.innerHTML = `<i class="fas fa-shopping-cart"></i> ${it.label} ➔ ${it.price.toLocaleString()} Ks`;
+    };
+    grid.appendChild(el);
+  });
+}
+
+function switchGame(name){
+  currentGame = name;
+  document.getElementById('tab-mlbb').classList.toggle('active', name==='mlbb');
+  document.getElementById('tab-pubg').classList.toggle('active', name==='pubg');
+  document.getElementById('mlInputs').style.display = name==='mlbb' ? 'block' : 'none';
+  document.getElementById('nicknameDisplay').innerText = "";
+  document.getElementById('selectionSummary').style.display = 'none';
+  selectedPackage = null;
+  renderGrid();
+}
+
+async function checkName() {
+  if(currentGame !== 'mlbb') return;
+  const id = document.getElementById('playerId').value;
+  const sv = document.getElementById('serverId').value;
+  const nDisp = document.getElementById('nicknameDisplay');
+  if(id.length >= 5 && sv.length >= 3) {
+    nDisp.innerText = "🔍 Checking...";
+    try {
+      const res = await fetch(`https://api.isan.eu.org/nickname/ml?id=${id}&server=${sv}`);
+      const data = await res.json();
+      if(data.nickname || data.name) {
+        verifiedName = data.nickname || data.name;
+        nDisp.innerText = "✅ Name: " + verifiedName;
+      } else { nDisp.innerText = "❌ ID Not Found"; verifiedName = ""; }
+    } catch(e) { nDisp.innerText = ""; verifiedName = ""; }
+  }
+}
+
+document.getElementById('playerId').addEventListener('input', checkName);
+document.getElementById('serverId').addEventListener('input', checkName);
+
+function selectPM(type, el){
+  document.querySelectorAll('.pm').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('dispNumber').innerText = type === 'KPay' ? 'none kpay' : '09771685463';
+  document.getElementById('dispName').innerText = type === 'KPay' ? 'contact tg' : 'Mar Oo';
+}
+
+async function submitOrder(){
+  const btn = document.getElementById('orderBtn');
+  const file = document.getElementById('slip').files[0];
+  const pid = document.getElementById('playerId').value;
+  const sid = document.getElementById('serverId').value;
+
+  if(!selectedPackage || !pid || !file) return alert('ဖြည့်ရန်ကျန်နေပါသေးသည်။');
+  
+  btn.disabled = true; btn.innerText = "Processing...";
+  const text = `📦 *New Order!*\n🎮 Game: ${currentGame.toUpperCase()}\n💎 Item: ${selectedPackage.label}\n💰 Price: ${selectedPackage.price} Ks\n🆔 ID: ${pid} (${sid || '-'})\n👤 Name: ${verifiedName || 'Unknown'}`;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode:'Markdown' })
+    });
+    const fd = new FormData();
+    fd.append('chat_id', CHAT_ID); fd.append('photo', file);
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:'POST', body: fd });
+    alert('တင်ပြီးပါပြီ။'); location.reload();
+  } catch(e) { alert('Error!'); btn.disabled = false; btn.innerText = "Order Now"; }
+}
+
+// Banner Slider Logic
+let currentSlide = 0;
+function autoSlide() {
+  const wrapper = document.getElementById('bannerWrapper');
+  const slidesCount = wrapper.querySelectorAll('img').length;
+  currentSlide = (currentSlide + 1) % slidesCount;
+  wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+setInterval(autoSlide, 4000);
+
+renderGrid();
+</script>
+</body>
+</html>
