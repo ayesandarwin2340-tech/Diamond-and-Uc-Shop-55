@@ -330,28 +330,58 @@ function selectPM(type, el){
   document.getElementById('dispName').innerText = type === 'KPay' ? 'contact tg' : 'Mar Oo';
 }
 
-async function submitOrder(){
+async function submitOrder() {
   const btn = document.getElementById('orderBtn');
-  const file = document.getElementById('slip').files[0];
+  const fileInput = document.getElementById('slip');
+  const file = fileInput.files[0];
   const pid = document.getElementById('playerId').value;
   const sid = document.getElementById('serverId').value;
 
-  if(!selectedPackage || !pid || !file) return alert('ဖြည့်ရန်ကျန်နေပါသေးသည်။');
-  
-  btn.disabled = true; btn.innerText = "Processing...";
-  const text = `📦 *New Order!*\n🎮 Game: ${currentGame.toUpperCase()}\n💎 Item: ${selectedPackage.label}\n💰 Price: ${selectedPackage.price} Ks\n🆔 ID: ${pid} (${sid || '-'})\n👤 Name: ${verifiedName || 'Unknown'}`;
+  if (!selectedPackage || !pid || !file) {
+    return alert('ဖြည့်ရန်ကျန်နေပါသေးသည်။');
+  }
+
+  btn.disabled = true;
+  btn.innerText = "Processing...";
+
+  // Markdown အစား HTML format ကို ပြောင်းသုံးထားပါတယ် (Special characters error မတက်အောင်လို့ပါ)
+  const captionText = `<b>📦 New Order!</b>\n` +
+                      `🎮 Game: ${currentGame.toUpperCase()}\n` +
+                      `💎 Item: ${selectedPackage.label}\n` +
+                      `💰 Price: ${selectedPackage.price.toLocaleString()} Ks\n` +
+                      `🆔 ID: ${pid} (${sid || '-'})\n` +
+                      `👤 Name: ${verifiedName || 'Unknown'}`;
+
+  const fd = new FormData();
+  fd.append('chat_id', CHAT_ID);
+  fd.append('photo', file);
+  fd.append('caption', captionText);
+  fd.append('parse_mode', 'HTML'); // ဒီနေရာမှာ HTML လို့ ပြောင်းလိုက်ပါ
 
   try {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode:'Markdown' })
+    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { 
+      method: 'POST', 
+      body: fd 
     });
-    const fd = new FormData();
-    fd.append('chat_id', CHAT_ID); fd.append('photo', file);
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:'POST', body: fd });
-    alert('တင်ပြီးပါပြီ။'); location.reload();
-  } catch(e) { alert('Error!'); btn.disabled = false; btn.innerText = "Order Now"; }
+
+    const result = await res.json();
+
+    if (res.ok) {
+      alert('အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်။'); 
+      location.reload();
+    } else {
+      // Error ကို ပိုသိသာအောင် ပြပေးမယ်
+      alert('Error: ' + result.description);
+      btn.disabled = false;
+      btn.innerText = "Order Now 🛒";
+    }
+  } catch (e) { 
+    alert('ပို့ဆောင်မှု မအောင်မြင်ပါ။ အင်တာနက်စစ်ဆေးပေးပါ။'); 
+    btn.disabled = false; 
+    btn.innerText = "Order Now 🛒"; 
+  }
 }
+
 
 // Banner Slider Logic
 let currentSlide = 0;
